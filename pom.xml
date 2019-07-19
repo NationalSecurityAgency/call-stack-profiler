@@ -6,48 +6,72 @@
 
     <groupId>utils</groupId>
     <artifactId>call-stack-profiler-core</artifactId>
-    <version>1.4.X-SNAPSHOT</version>
+    <version>1.5.X-SNAPSHOT</version>
+
+    <properties>
+        <groovy.version>2.5.7</groovy.version>
+        <spock.myVersion>1.3-groovy-2.5</spock.myVersion>
+
+        <groovy.eclipse.compiler.version>3.4.0-01</groovy.eclipse.compiler.version>
+        <!-- This should match groovy.version        -->
+        <groovy.eclipse.batch.version>2.5.7-01</groovy.eclipse.batch.version>
+
+        <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
+        <commons.lang3.version>3.9</commons.lang3.version>
+        <joda.time.version>2.10.3</joda.time.version>
+        <slf4j.version>1.7.26</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+
+        <versions.maven.plugin>2.7</versions.maven.plugin>
+        <maven.scm.plugin>1.11.2</maven.scm.plugin>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>2.4.12</version>
+            <version>${groovy.version}</version>
             <scope>provided</scope>
+            <type>pom</type>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
+            <version>${commons.lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.1</version>
+            <version>${joda.time.version}</version>
         </dependency>
 
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.1</version>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
-            <version>1.0-groovy-2.4</version>
-            <scope>test</scope>
+            <version>${spock.myVersion}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy-all</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>
@@ -59,27 +83,37 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
             </plugin>
 
             <!-- groovy plugin -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                     <compilerId>groovy-eclipse-compiler</compilerId>
+                    <compilerArguments>
+                        <indy/>
+                        <configScript>config.groovy</configScript>
+                    </compilerArguments>
                 </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
-                        <version>2.9.2-01</version>
+                        <version>${groovy.eclipse.compiler.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>2.4.3-01</version>
+                        <version>${groovy.eclipse.batch.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>${groovy.version}</version>
+                        <type>pom</type>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -87,13 +121,13 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.2</version>
+                <version>${versions.maven.plugin}</version>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-plugin</artifactId>
-                <version>1.9.4</version>
+                <version>${maven.scm.plugin}</version>
                 <configuration>
                     <tag>${project.version}</tag>
                 </configuration>

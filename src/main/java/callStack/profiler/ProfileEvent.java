@@ -91,6 +91,9 @@ public class ProfileEvent implements Serializable {
     private final static NumberFormat NUMBER_FORMAT = NumberFormat.getInstance();
 
     private void buildPrettyString(StringBuilder res, ProfileEvent node, String pre) {
+        if (res.length() > 0) {
+            res.append("\n");
+        }
         StringBuilder preBuilder = new StringBuilder(pre);
         if (node.isConcurrent) {
             preBuilder.append("|");
@@ -112,7 +115,6 @@ public class ProfileEvent implements Serializable {
         if (hasChildren) {
             handleUnaccountedTime(res, node);
         }
-        res.append("\n");
         if (hasChildren) {
             preBuilder.append("     ");
             for (ProfileEvent profileEvent : node.getChildrenAsMap().values()) {

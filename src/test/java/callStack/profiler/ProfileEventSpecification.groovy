@@ -42,14 +42,14 @@ class ProfileEventSpecification extends Specification{
 
         where:
         profileEvent			| result
-        new ProfileEvent(name: "p", runtimeInMillis: 1000, numOfInvocations: 1)	                | "|-> p (1) : 1s \n"
-        new ProfileEvent(name: "p", runtimeInMillis: 10*1000, numOfInvocations: 1)	            | "|-> p (1) : 10s \n"
-        new ProfileEvent(name: "p", runtimeInMillis: 29999, numOfInvocations: 1)	            | "|-> p (1) : 29s 999ms\n"
-        new ProfileEvent(name: "p", runtimeInMillis: 30*1000, numOfInvocations: 1)	            | "|-> p (1) : 30s \n"
-        new ProfileEvent(name: "p", runtimeInMillis: 60*1000 + 1000, numOfInvocations: 1)	    | "|-> p (1) : 1m 1s \n"
-        new ProfileEvent(name: "p", runtimeInMillis: 59*60*1000 + 59*1000, numOfInvocations: 1)	| "|-> p (1) : 59m 59s \n"
-        new ProfileEvent(name: "p", runtimeInMillis: 62*60*1000 + 59*1000, numOfInvocations: 1)	| "|-> p (1) : 1h 2m 59s \n"
-        new ProfileEvent(name: "p", runtimeInMillis: 143*60*1000 + 199, numOfInvocations: 1)    | "|-> p (1) : 2h 23m 199ms\n"
+        new ProfileEvent(name: "p", runtimeInMillis: 1000, numOfInvocations: 1)	                | "|-> p (1) : 1s "
+        new ProfileEvent(name: "p", runtimeInMillis: 10*1000, numOfInvocations: 1)	            | "|-> p (1) : 10s "
+        new ProfileEvent(name: "p", runtimeInMillis: 29999, numOfInvocations: 1)	            | "|-> p (1) : 29s 999ms"
+        new ProfileEvent(name: "p", runtimeInMillis: 30*1000, numOfInvocations: 1)	            | "|-> p (1) : 30s "
+        new ProfileEvent(name: "p", runtimeInMillis: 60*1000 + 1000, numOfInvocations: 1)	    | "|-> p (1) : 1m 1s "
+        new ProfileEvent(name: "p", runtimeInMillis: 59*60*1000 + 59*1000, numOfInvocations: 1)	| "|-> p (1) : 59m 59s "
+        new ProfileEvent(name: "p", runtimeInMillis: 62*60*1000 + 59*1000, numOfInvocations: 1)	| "|-> p (1) : 1h 2m 59s "
+        new ProfileEvent(name: "p", runtimeInMillis: 143*60*1000 + 199, numOfInvocations: 1)    | "|-> p (1) : 2h 23m 199ms"
     }
 
     def "serialize should not throw exceptions :) "(){
@@ -89,8 +89,7 @@ class ProfileEventSpecification extends Specification{
         pretty.toString().trim() == '''
 |-> test (0) : 010ms [001ms]
 |     |-> child2 (0) : 005ms
-|     |-> child1 (0) : 004ms
-'''.toString().trim()
+|     |-> child1 (0) : 004ms'''.toString().trim()
     }
 
     def "demonstrate how much time is unaccounted for within its concurrent children"() {
@@ -107,8 +106,7 @@ class ProfileEventSpecification extends Specification{
         pretty.toString().trim() == '''
 |-> test (0) : 010ms [005ms]
 |     ||-> child2 (0) : 005ms
-|     ||-> child1 (0) : 004ms
-'''.toString().trim()
+|     ||-> child1 (0) : 004ms'''.toString().trim()
     }
 
     def "demonstrate how much time is unaccounted for within its concurrent children and synchronous children"() {
@@ -128,8 +126,7 @@ class ProfileEventSpecification extends Specification{
 |-> test (0) : 010ms [001ms]
 |     ||-> child2 (0) : 005ms
 |     ||-> child3 (0) : 005ms
-|     |-> child1 (0) : 004ms
-'''.toString().trim()
+|     |-> child1 (0) : 004ms'''.toString().trim()
     }
 
     def "demonstrate how much time is unaccounted for within its concurrent children and several synchronous children"() {
@@ -152,8 +149,7 @@ class ProfileEventSpecification extends Specification{
 |     |-> child4 (0) : 007ms
 |     |-> child2 (0) : 005ms
 |     ||-> child3 (0) : 006ms
-|     ||-> child1 (0) : 004ms
-'''.toString().trim()
+|     ||-> child1 (0) : 004ms'''.toString().trim()
     }
 
 
@@ -171,7 +167,6 @@ class ProfileEventSpecification extends Specification{
         pretty.toString().trim() == '''
 |-> test (0) : 010ms [005ms]
 |     |||-> child2 (0) : 005ms
-|     |||-> child1 (0) : 004ms
-'''.toString().trim()
+|     |||-> child1 (0) : 004ms'''.toString().trim()
     }
 }

@@ -6,7 +6,7 @@
 
     <groupId>profile</groupId>
     <artifactId>call-stack-profiler</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <properties>
         <groovy.version>2.5.7</groovy.version>

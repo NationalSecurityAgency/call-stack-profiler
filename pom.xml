@@ -8,6 +8,14 @@
     <artifactId>call-stack-profiler</artifactId>
     <version>1.0.2-SNAPSHOT</version>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <properties>
         <groovy.version>2.5.7</groovy.version>
         <spock.myVersion>1.3-groovy-2.5</spock.myVersion>
@@ -194,6 +202,73 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <!--                mvn license:add-third-party-->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>add-third-party</goal>
+                        </goals>
+                        <configuration>
+                            <!-- will use backend/src/license/THIRD-PARTY.properties -->
+                            <useMissingFile>true</useMissingFile>
+
+                            <!--  If true enforces excluding transitive dependencies of the excluded artifacts in the reactor;
+                                    otherwise only artifacts that match exclude filters are excluded.
+                                       works in conjunction with excludedScopes-->
+                            <excludeTransitiveDependencies>true</excludeTransitiveDependencies>
+                            <excludedScopes>test,provided</excludedScopes>
+
+                            <!-- white list of licenses, build will fail if a 3rd party licences is not found in this list -->
+                            <failIfWarning>true</failIfWarning>
+                            <failOnMissing>true</failOnMissing>
+                            <includedLicenses>
+                                <includedLicense>The Apache Software License, Version 2.0</includedLicense>
+                                <includedLicense>MIT License</includedLicense>
+                                <includedLicense>Eclipse Public License - Version 1.0</includedLicense>
+                                <includedLicense>The 3-Clause BSD License</includedLicense>
+                            </includedLicenses>
+                            <licenseMerges>
+                                <licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0</licenseMerge>
+                                <licenseMerge>Eclipse Public License - Version 1.0|Eclipse Public License 1.0</licenseMerge>
+                                <licenseMerge>The 3-Clause BSD License|New BSD License</licenseMerge>
+                            </licenseMerges>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <!--                mvn com.mycila:license-maven-plugin:3.0:check
+                                    mvn com.mycila:license-maven-plugin:3.0:format-->
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <header>${basedir}/src/license/LICENSE-HEADER.txt</header>
+                    <excludes>
+                        <exclude>**/*.xml</exclude>
+                        <exclude>**/*.jks</exclude>
+                        <exclude>**/*.ftl</exclude>
+                        <exclude>src/main/resources/public/**</exclude>
+                        <exclude>**/license/*.properties</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

@@ -259,6 +259,7 @@
                         <exclude>**/*.ftl</exclude>
                         <exclude>src/main/resources/public/**</exclude>
                         <exclude>**/license/*.properties</exclude>
+                        <exclude>LICENSE.txt</exclude>
                     </excludes>
                 </configuration>
                 <executions>

@@ -148,6 +148,54 @@ If you select to manually manage start/stop events then please:
 
 ### Delegate concurrent tasks to a Thread Pool
 
+Call Stack Profiler supplies a thread pool implementation ``ProfThreadPool`` 
+which makes it seamless to execute and profile concurrent tasks.
+
+Below is an example of executing methods ``m1()`` and ``(m2)`` concurrently:
+
+```groovy
+class Example {
+    @Profile
+    void runConcurrent() {
+        ProfThreadPool threadPool = new ProfThreadPool("Threads", 2, 2)
+        threadPool.warnIfFull = false
+        List<Callable<Integer>> callables = [
+                ThreadPoolUtils.callable {
+                    m1()
+                },
+                ThreadPoolUtils.callable {
+                    m2()
+                },
+        ]
+        List<Integer> res = threadPool.asyncExec(callables)
+        println "Result: ${res}"
+    }
+
+    @Profile
+    int m1() {
+        5.times { m2() }
+        return 10
+    }
+
+    @Profile()
+    int m2() {
+        Thread.sleep(20)
+        return 5
+    }
+}
+```
+
+Then the output is:
+```
+Result: [10, 5]
+|-> Example.runConcurrent (1) : 104ms [003ms]
+|     ||-> Example.m1-Threads-1 (1) : 101ms [000ms]
+|     ||     |-> Example.m2 (5) : 101ms
+|     ||-> Example.m2-Threads-2 (1) : 020ms 
+```
+
+``||`` depicts that the code is being executed concurrently  
+
 ### Each Call as its own event
 
 If you are calling a method within a loop AND the loop has a reasonable (for display purposes) number of elements, 
@@ -183,14 +231,141 @@ Then the output is:
 
 ### Exceptions
 
-## How does it work?
+Exceptions are propagated as expected. For example:
+
+```groovy
+class Example {
+    @Profile
+    int m1() {
+        5.times { m2() }
+        return 10
+    }
+
+    @Profile()
+    int m2() {
+        throw new RuntimeException("It's fun to fail!")
+    }
+}
+```
+
+Then the output is:
+```
+Exception in thread "main" java.lang.RuntimeException: It's fun to fail!
+	at callStack.profiler.examples.Example.m2(Example.groovy:15)
+...
+...
+```
 
 ### Entry method
 
-### Compile Time
+At runtime, profiling starts when the very first profiling artifact is encountered, which can be one of these:
+- ``@Profile`` annotation
+- ``Cprof.prof`` method
+- ``CProf.start`` method
 
+If the same entry point is encountered again then the profiling restarts/resets (there can only be one entry point). 
+Please consider:
 
-  
- 
- 
+```groovy
+class Example {
+    @Profile
+    int entryPoint() {
+        5.times { m2() }
+        return 10
+    }
 
+    @Profile()
+    int m2() {
+        Thread.sleep(200)
+        return 5
+    }
+}
+```
+and then:
+```groovy
+class ForDocs {
+    static void main(String[] args) {
+        5.times {
+            new Example().entryPoint()
+        }
+        println CProf.prettyPrint()
+    }
+}
+```
+
+The output is then:
+```
+|-> Example.entryPoint (1) : 1s 001ms [000ms]
+|     |-> Example.m2 (5) : 1s 001ms
+```
+
+``entryPoint()`` is first time profiling event is discovered, so each time the profiler see the entry point method it resets its profiling stack. 
+Let's move ``CProf.prettyPrint()`` into the loop:
+```groovy
+class ForDocs {
+    static void main(String[] args) {
+        5.times {
+            new Example().entryPoint()
+            println CProf.prettyPrint()
+        }
+    }
+}
+```
+Now the output is: 
+```
+|-> Example.entryPoint (1) : 1s 011ms [001ms]
+|     |-> Example.m2 (5) : 1s 010ms
+|-> Example.entryPoint (1) : 1s 001ms [000ms]
+|     |-> Example.m2 (5) : 1s 001ms
+|-> Example.entryPoint (1) : 1s 001ms [000ms]
+|     |-> Example.m2 (5) : 1s 001ms
+|-> Example.entryPoint (1) : 1s 003ms [001ms]
+|     |-> Example.m2 (5) : 1s 002ms
+|-> Example.entryPoint (1) : 1s 001ms [000ms]
+|     |-> Example.m2 (5) : 1s 001ms
+```
+
+### Access Profile Stack Programmatically   
+
+Instead of using ``CProf.prettyPrint()`` you can get a hold of the entry event programmatically via ``CProf.rootEvent`` and then store the results anywhere you want. 
+For example: 
+```groovy
+ProfileEvent entryEvent = CProf.rootEvent
+// grab child events
+entryEvent.children.each {
+    // use these accessors
+    it.getName()
+    it.getNumOfInvocations()
+    it.getRuntimeInMillis()
+    it.isConcurrent()
+    it.isRemote()
+}
+```
+
+## How does it work?
+
+Call Stack profiler utilizes Groovy's (Abstract Syntax Tree) AST Transformation to inject profiling code into the annotated methods.
+Profiling code is injected at compilation phase so there is no introspection at runtime which equates to the minimal overhead. 
+
+For example take the following code:
+
+```groovy
+    @Profile()
+    int m2() {
+        return 5
+    }
+```
+
+will be compiled into something like this:
+
+```groovy
+    int m2() {
+        String profName = "m2"
+        CProf.start(profName)
+        try {
+            return 5
+        } finally {
+            CProf.stop(profName)    
+        }
+    }
+```

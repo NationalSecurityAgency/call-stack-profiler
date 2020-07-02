@@ -2,11 +2,11 @@
 
 > Profile your code with negligible performance and memory overhead.
 
-This profiler keeps track of the method calls and outputs method call hierarchy allowing developers 
+This profiler keeps track of the method calls and outputs method call hierarchy, allowing developers 
 to quickly comprehend execution time breakdown. 
-- The profiler is **fast** and is appropriate to have track and output in a production system
+- The profiler is **fast** and is appropriate to have track and output enabled in a production system
 - Use ``@Profile`` to easily annotate Groovy methods OR wrap logic in a closure OR manually start/stop events
-- Naturally fits into the service based architecture
+- Naturally fits into a service based architecture
 - Provides support for delegating concurrent tasks to a Thread Pool 
 
 Consider the following class where methods are annotated with the ``@Profile`` annotation:
@@ -50,14 +50,14 @@ then the output is:
 The output provides method call hierarchy as well as the following information:
 - Total method execution time: number in ms, seconds and/or minutes 
 - ``(N)``: number of times method was called, m2() was called once and m3() called 5 times
-- ``[N ms]``: execution time which was not accounted by child methods/logic; this happens when either not all of the child methods/logic is profiled OR there is a GC or JVM overhead
+- ``[N ms]``: execution time which was not accounted for by child methods/logic; this happens when either not all of the child methods/logic is profiled OR there is a GC or JVM overhead
 
 ## Features
 
 ### Custom Profile Name
 
-When using ``@Profile`` annotation, by default profile names are derived from the method name and its parameters. 
-You can supply a custom name by setting ``name`` attribute on the ``@Profile`` annotation:
+When using the ``@Profile`` annotation, by default, profile names are derived from the method name and its parameters. 
+You can supply a custom name by setting the ``name`` attribute on the ``@Profile`` annotation:
 
 ```groovy
 class Example {
@@ -143,7 +143,7 @@ Then the output is:
 ```
 
 If you select to manually manage start/stop events then please:
-- always wrap logic in ``try/catch`` block to ensure the event is closed
+- always wrap logic in a ``try/catch`` block to ensure the event is closed
 - verify that the same name is used to start and end the event 
 
 ### Delegate concurrent tasks to a Thread Pool
@@ -199,7 +199,7 @@ Result: [10, 5]
 ### Each Call as its own event
 
 If you are calling a method within a loop AND the loop has a reasonable (for display purposes) number of elements, 
-then you may want to opt in displaying each method call as its own profiling events. 
+then you may want to opt for displaying each method call as its own profiling event. 
 
 Set attribute ``aggregateIntoSingleEvent = false`` for the ``@Profile`` annotation, for example:
  
@@ -299,7 +299,7 @@ The output is then:
 |     |-> Example.m2 (5) : 1s 001ms
 ```
 
-``entryPoint()`` is first time profiling event is discovered, so each time the profiler see the entry point method it resets its profiling stack. 
+``entryPoint()`` is the first time a profiling event is discovered, so each time the profiler encounters the entry point method it resets its profiling stack. 
 Let's move ``CProf.prettyPrint()`` into the loop:
 ```groovy
 class ForDocs {
@@ -345,7 +345,7 @@ entryEvent.children.each {
 ## How does it work?
 
 Call Stack profiler utilizes Groovy's (Abstract Syntax Tree) AST Transformation to inject profiling code into the annotated methods.
-Profiling code is injected at compilation phase so there is no introspection at runtime which equates to the minimal overhead. 
+Profiling code is injected during the compilation phase so there is no introspection at runtime which accounts for the minimal overhead. 
 
 For example take the following code:
 

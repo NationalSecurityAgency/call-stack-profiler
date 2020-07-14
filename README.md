@@ -1,5 +1,7 @@
 # Call Stack Profiler for Groovy 
 
+[![CI Badge](https://github.com/NationalSecurityAgency/call-stack-profiler/workflows/Continuous%20Integration/badge.svg)](https://github.com/NationalSecurityAgency/call-stack-profiler/actions?query=workflow%3A%22Continuous+Integration%22)
+
 > Profile your code with negligible performance and memory overhead.
 
 This profiler keeps track of the method calls and outputs method call hierarchy, allowing developers 

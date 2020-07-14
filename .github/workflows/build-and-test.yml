@@ -59,7 +59,6 @@ jobs:
     - name: Build skills-service
       run: mvn --batch-mode install
 
-
     - name: upload result artifacts
       if: ${{ always() }}
       uses: actions/upload-artifact@v2

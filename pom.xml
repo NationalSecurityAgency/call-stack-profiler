@@ -286,17 +286,17 @@
 
     <distributionManagement>
         <repository>
-            <id>nexus-releases</id>
+            <id>releases</id>
             <name>Release Repository</name>
             <url>
-                ${nexusServer}/repository/maven-releases/
+                ${distributionManagementReleasesUrl}
             </url>
         </repository>
         <snapshotRepository>
-            <id>nexus-snapshots</id>
+            <id>snapshots</id>
             <name>Snapshot Repository</name>
             <url>
-                ${nexusServer}/repository/maven-snapshots/
+                ${distributionManagementSnapshotsUrl}
             </url>
         </snapshotRepository>
     </distributionManagement>

@@ -24,7 +24,7 @@ on:
 
 jobs:
 
-  service-and-ui-against-h2:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:

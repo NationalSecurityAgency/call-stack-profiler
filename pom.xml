@@ -260,6 +260,7 @@
                         <exclude>src/main/resources/public/**</exclude>
                         <exclude>**/license/*.properties</exclude>
                         <exclude>LICENSE.txt</exclude>
+                        <exclude>.github/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>

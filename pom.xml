@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>profile</groupId>
+    <groupId>skilltree</groupId>
     <artifactId>call-stack-profiler</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.1</version>
 
     <licenses>
         <license>
@@ -284,19 +284,12 @@
 
     <distributionManagement>
         <repository>
-            <id>releases</id>
-            <name>Release Repository</name>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
             <url>
-                ${distributionManagementReleasesUrl}
+                https://maven.pkg.github.com/NationalSecurityAgency/call-stack-profiler
             </url>
         </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>Snapshot Repository</name>
-            <url>
-                ${distributionManagementSnapshotsUrl}
-            </url>
-        </snapshotRepository>
     </distributionManagement>
 
 </project>

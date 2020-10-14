@@ -17,19 +17,19 @@
     </licenses>
 
     <properties>
-        <groovy.version>3.0.4</groovy.version>
+        <groovy.version>3.0.5</groovy.version>
         <spock.myVersion>2.0-M3-groovy-3.0</spock.myVersion>
 
         <groovy.eclipse.compiler.version>3.6.0-03</groovy.eclipse.compiler.version>
         <!-- This should match groovy.version        -->
-        <groovy.eclipse.batch.version>3.0.5-01</groovy.eclipse.batch.version>
+        <groovy.eclipse.batch.version>3.0.6-01</groovy.eclipse.batch.version>
 
-        <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <commons.lang3.version>3.11</commons.lang3.version>
         <joda.time.version>2.10.6</joda.time.version>
         <log4j.version>2.13.3</log4j.version>
 
-        <versions.maven.plugin>2.7</versions.maven.plugin>
+        <versions.maven.plugin>2.8.1</versions.maven.plugin>
         <maven.scm.plugin>1.11.2</maven.scm.plugin>
     </properties>
 
@@ -196,7 +196,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M3</version>
+                <version>3.0.0-M5</version>
                 <configuration>
                     <includes>
                         <include>**/*Spec*.java</include>

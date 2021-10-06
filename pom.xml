@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>skilltree</groupId>
+    <groupId>dev.skilltreeplatform</groupId>
     <artifactId>call-stack-profiler</artifactId>
     <version>1.1.2-SNAPSHOT</version>
 
@@ -17,17 +17,17 @@
     </licenses>
 
     <properties>
-        <groovy.version>2.5.7</groovy.version>
-        <spock.myVersion>1.3-groovy-2.5</spock.myVersion>
+        <groovy.version>3.0.7</groovy.version>
+        <spock.myVersion>2.0-M4-groovy-3.0</spock.myVersion>
 
-        <groovy.eclipse.compiler.version>3.4.0-01</groovy.eclipse.compiler.version>
+        <groovy.eclipse.compiler.version>3.6.0-03</groovy.eclipse.compiler.version>
         <!-- This should match groovy.version        -->
-        <groovy.eclipse.batch.version>2.5.7-01</groovy.eclipse.batch.version>
+        <groovy.eclipse.batch.version>3.0.7-01</groovy.eclipse.batch.version>
 
-        <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
-        <commons.lang3.version>3.9</commons.lang3.version>
-        <joda.time.version>2.10.3</joda.time.version>
-        <log4j.version>2.11.2</log4j.version>
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <commons.lang3.version>3.11</commons.lang3.version>
+        <joda.time.version>2.10.6</joda.time.version>
+        <log4j.version>2.13.3</log4j.version>
 
         <versions.maven.plugin>2.7</versions.maven.plugin>
         <maven.scm.plugin>1.11.2</maven.scm.plugin>
@@ -40,6 +40,12 @@
             <version>${groovy.version}</version>
             <scope>provided</scope>
             <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy-testng</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -58,7 +64,6 @@
             <artifactId>log4j-bom</artifactId>
             <version>${log4j.version}</version>
             <type>pom</type>
-            <scope>import</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -70,14 +75,15 @@
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
             <version>${spock.myVersion}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.groovy</groupId>
-                    <artifactId>groovy-all</artifactId>
-                </exclusion>
-            </exclusions>
+            <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 
@@ -94,18 +100,13 @@
         </pluginManagement>
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-
             <!-- groovy plugin -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>11</source>
+                    <target>11</target>
                     <compilerId>groovy-eclipse-compiler</compilerId>
                     <compilerArguments>
                         <indy/>
@@ -128,6 +129,12 @@
                         <artifactId>groovy-all</artifactId>
                         <version>${groovy.version}</version>
                         <type>pom</type>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-testng</artifactId>
+                            </exclusion>
+                        </exclusions>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -182,7 +189,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
+                <version>3.0.0-M3</version>
                 <configuration>
                     <includes>
                         <include>**/*Spec*.java</include>
@@ -229,12 +236,16 @@
                                 <includedLicense>The Apache Software License, Version 2.0</includedLicense>
                                 <includedLicense>MIT License</includedLicense>
                                 <includedLicense>Eclipse Public License - Version 1.0</includedLicense>
+                                <includedLicense>Eclipse Public License - Version 2.0</includedLicense>
                                 <includedLicense>The 3-Clause BSD License</includedLicense>
+                                <includedLicense>The BSD License</includedLicense>
+                                <includedLicense>GNU Lesser General Public License</includedLicense>
                             </includedLicenses>
                             <licenseMerges>
-                                <licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0</licenseMerge>
+                                <licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0|The Apache License, Version 2.0|The Apache Software License, version 2.0</licenseMerge>
                                 <licenseMerge>Eclipse Public License - Version 1.0|Eclipse Public License 1.0</licenseMerge>
-                                <licenseMerge>The 3-Clause BSD License|New BSD License</licenseMerge>
+                                <licenseMerge>Eclipse Public License - Version 2.0|Eclipse Public License v2.0</licenseMerge>
+                                <licenseMerge>The 3-Clause BSD License|New BSD License|BSD Licence 3|BSD License 3</licenseMerge>
                             </licenseMerges>
                         </configuration>
                     </execution>
@@ -269,6 +280,57 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
         <resources>
@@ -282,13 +344,10 @@
     <!-- ******************* Distribution Management ******************* -->
 
     <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>
-                https://maven.pkg.github.com/NationalSecurityAgency/call-stack-profiler
-            </url>
-        </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
 </project>

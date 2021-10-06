@@ -11,6 +11,7 @@ to quickly comprehend execution time breakdown.
 - Naturally fits into a service based architecture
 - Provides support for delegating concurrent tasks to a Thread Pool 
 
+## Usage 
 Consider the following class where methods are annotated with the ``@Profile`` annotation:
 ```groovy
 class Example {
@@ -54,6 +55,22 @@ The output provides method call hierarchy as well as the following information:
 - ``(N)``: number of times method was called, m2() was called once and m3() called 5 times
 - ``[N ms]``: execution time which was not accounted for by child methods/logic; this happens when either not all of the child methods/logic is profiled OR there is a GC or JVM overhead
 
+### Get Started
+
+Maven: 
+```xml
+<dependency>
+    <groupId>dev.skilltreeplatform</groupId>
+    <artifactId>call-stack-profiler</artifactId>
+    <version>1.1.3</version>
+</dependency>
+```
+Gradle: 
+```yaml
+dependencies {
+  api 'dev.skilltreeplatform:call-stack-profiler:1.1.3'
+}
+```
 ## Features
 
 ### Custom Profile Name

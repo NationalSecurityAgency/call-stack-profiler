@@ -62,13 +62,13 @@ Maven:
 <dependency>
     <groupId>dev.skilltreeplatform</groupId>
     <artifactId>call-stack-profiler</artifactId>
-    <version>1.1.4</version>
+    <version>1.1.6</version>
 </dependency>
 ```
 Gradle: 
 ```yaml
 dependencies {
-  api 'dev.skilltreeplatform:call-stack-profiler:1.1.4'
+  api 'dev.skilltreeplatform:call-stack-profiler:1.1.6'
 }
 ```
 ## Features

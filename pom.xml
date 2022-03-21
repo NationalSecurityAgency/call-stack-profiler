@@ -6,7 +6,7 @@
 
     <groupId>dev.skilltreeplatform</groupId>
     <artifactId>call-stack-profiler</artifactId>
-    <version>1.1.6</version>
+    <version>1.1.7-SNAPSHOT</version>
 
     <name>Call Stack Profiler</name>
     <description>This profiler keeps track of the method calls and outputs method call hierarchy, allowing developers to quickly comprehend execution time breakdown. Profile your code with negligible performance and memory overhead.</description>
